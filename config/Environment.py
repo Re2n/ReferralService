@@ -16,9 +16,6 @@ class EnvironmentSettings(BaseSettings):
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: str
-    ADMIN_USER: str
-    ADMIN_PASSWORD: str
-    SECRET_KEY: str
 
     class Config:
         env_file = get_env_filename()

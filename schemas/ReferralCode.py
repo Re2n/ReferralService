@@ -1,9 +1,10 @@
 from datetime import datetime
 
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from schemas.Base import Base
-from schemas.User import User
+from schemas import User
 from schemas.mixins.int_id_pk import IntIdPkMixin
 
 
@@ -12,4 +13,4 @@ class ReferralCode(IntIdPkMixin, Base):
 
     code: Mapped[str] = mapped_column(nullable=False)
     date_expired: Mapped[datetime] = mapped_column()
-    user: Mapped["User"] = relationship(back_populates="referral_code")
+    creator: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
