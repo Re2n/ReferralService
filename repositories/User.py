@@ -1,13 +1,20 @@
+from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.UserCreate import UserCreate
 from schemas.User import User
+from utils import auth
 
 
 class UserRepository:
     async def create_user(self, session: AsyncSession, user: UserCreate) -> UserCreate:
-        new_user = User(**user.model_dump())
-        session.add(new_user)
+        hash_password = await auth.hash_password(user.password)
+        stmt = insert(User).values(email=user.email, password=hash_password)
+        await session.execute(stmt)
         await session.commit()
-        await session.refresh(new_user)
         return user
+
+    async def get_user(self, session: AsyncSession, email: str) -> User:
+        stmt = select(User).where(User.email == email)
+        result = await session.execute(stmt)
+        return result.scalar()

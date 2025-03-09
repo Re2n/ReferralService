@@ -13,9 +13,8 @@ class UserService:
         self.repository = repository
 
     async def create_user(self, session: AsyncSession, user: UserCreate):
-        stmt = select(User).where(User.email == user.email)
-        result = await session.execute(stmt)
-        if result.scalar():
+        res = await self.repository.get_user(session, user.email)
+        if res is not None:
             raise HTTPException(status_code=409, detail="User already exists")
         new_user = await self.repository.create_user(session, user)
         return new_user
