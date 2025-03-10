@@ -6,7 +6,7 @@ import jwt
 from config.AuthJWT import auth_jwt
 
 
-def encode_jwt(
+async def encode_jwt(
     payload: dict,
     private_key: str = auth_jwt.private_key_path.read_text(),
     algorithm: str = auth_jwt.algorithm,
@@ -31,7 +31,7 @@ def encode_jwt(
     return encoded
 
 
-def decode_jwt(
+async def decode_jwt(
     token: str | bytes,
     public_key: str = auth_jwt.public_key_path.read_text(),
     algorithm: str = auth_jwt.algorithm,
@@ -44,7 +44,7 @@ def decode_jwt(
     return decoded
 
 
-def hash_password(
+async def hash_password(
     password: str,
 ) -> bytes:
     salt = bcrypt.gensalt()
@@ -52,7 +52,7 @@ def hash_password(
     return bcrypt.hashpw(pwd_bytes, salt)
 
 
-def validate_password(
+async def validate_password(
     password: str,
     hashed_password: bytes,
 ) -> bool:
