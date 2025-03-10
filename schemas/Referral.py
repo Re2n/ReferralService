@@ -8,5 +8,9 @@ from schemas.mixins.int_id_pk import IntIdPkMixin
 class Referral(IntIdPkMixin, Base):
     __tablename__ = "referral"
 
-    referrer: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    referrer: Mapped[int] = mapped_column(
+        ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )

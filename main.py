@@ -15,6 +15,7 @@ async def lifespan(app: FastAPI):
     yield
     await db.dispose()
 
+
 app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
 app.include_router(referral_code_router)

@@ -17,11 +17,14 @@ referral_code_service = ReferralCodeService(referral_code_repository)
 
 auth_service = AuthService(user_repository)
 
+
 async def get_user_service():
     return user_service
 
+
 async def get_auth_service():
     return auth_service
+
 
 async def get_referral_code_service():
     return referral_code_service

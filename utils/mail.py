@@ -14,11 +14,12 @@ async def create_template(referral_code: ReferralCodeCreate):
     """
     return template
 
+
 async def create_message(email: str, referral_code: ReferralCodeCreate):
     msg = MessageSchema(
-        subject='Referral Service',
+        subject="Referral Service",
         recipients=[email],
         body=await create_template(referral_code),
-        subtype='html'
+        subtype="html",
     )
     return msg

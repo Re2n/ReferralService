@@ -2,20 +2,19 @@ from typing import Annotated
 
 from fastapi import APIRouter
 from fastapi.params import Depends
-from fastapi_mail import FastMail
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.Database import db
-from config.Mail import conf
-from models.Email import Email
-from models.ReferralCodeCreate import ReferralCodeCreate
-from models.UserCreate import UserCreate, UserResponse
-from models.TokenInfo import TokenInfo
-from utils.depends import user_service, auth_service, referral_code_service
-from utils import auth
-from utils.mail import create_message
 
-user_router = APIRouter(tags=['User'])
+from models.UserCreate import UserCreate
+from models.TokenInfo import TokenInfo
+from utils.depends import user_service, auth_service
+from utils import auth
+
+
+user_router = APIRouter(tags=["User"])
+
 
 @user_router.post("/login/")
 async def auth_user_issue_jwt(
@@ -34,14 +33,16 @@ async def auth_user_issue_jwt(
         token_type="Bearer",
     )
 
-@user_router.post('/register/')
+
+@user_router.post("/register/")
 async def register_user(
-        session: Annotated[AsyncSession, Depends(db.session_getter)],
-        user: UserCreate,
-        referral_code: str | None = None,
+    session: Annotated[AsyncSession, Depends(db.session_getter)],
+    user: UserCreate,
+    referral_code: str | None = None,
 ) -> UserCreate:
     res = await user_service.create_user(session, user, referral_code)
     return res
+
 
 @user_router.get("/me/")
 async def auth_user_check_self_info(
@@ -55,10 +56,11 @@ async def auth_user_check_self_info(
         "logged_in_at": iat,
     }
 
+
 @user_router.get("/get_referrals/{referrer_id}")
 async def get_referrals(
-        session: Annotated[AsyncSession, Depends(db.session_getter)],
-        referrer_id: int,
+    session: Annotated[AsyncSession, Depends(db.session_getter)],
+    referrer_id: int,
 ):
     res = await user_service.get_referrals(session, referrer_id)
     return res

@@ -5,6 +5,7 @@ import jwt
 
 from config.AuthJWT import auth_jwt
 
+
 def encode_jwt(
     payload: dict,
     private_key: str = auth_jwt.private_key_path.read_text(),

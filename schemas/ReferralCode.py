@@ -12,4 +12,6 @@ class ReferralCode(IntIdPkMixin, Base):
 
     code: Mapped[str] = mapped_column(nullable=False, unique=True)
     date_expired: Mapped[datetime] = mapped_column()
-    creator: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    creator: Mapped[int] = mapped_column(
+        ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )

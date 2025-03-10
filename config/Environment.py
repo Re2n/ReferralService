@@ -3,6 +3,7 @@ import os
 
 from pydantic_settings import BaseSettings
 
+
 @lru_cache
 def get_env_filename():
     runtime_env = os.getenv("ENV")
@@ -22,6 +23,7 @@ class EnvironmentSettings(BaseSettings):
     MAIL_STARTTLS: bool
     MAIL_SSL_TLS: bool
     MAIL_FROM: str
+    APP_PORT: int
 
     class Config:
         env_file = get_env_filename()

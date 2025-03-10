@@ -1,5 +1,8 @@
 from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer
+from fastapi.security import (
+    HTTPBearer,
+    HTTPAuthorizationCredentials,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 from jwt.exceptions import InvalidTokenError
 from models.UserCreate import UserResponse, UserCreate
@@ -8,17 +11,16 @@ from utils import auth
 
 http_bearer = HTTPBearer()
 
+
 class AuthService:
     def __init__(self, repository: UserRepository):
         self.repository = repository
 
     async def validate_auth_user(
-            self,
-            session: AsyncSession,
-            user: UserCreate
-        ) -> UserResponse:
+        self, session: AsyncSession, user: UserCreate
+    ) -> UserResponse:
         res = await self.repository.get_user(session, user.email)
-        exc = HTTPException(status_code=401, detail='Invalid credentials')
+        exc = HTTPException(status_code=401, detail="Invalid credentials")
         if res is None:
             raise exc
         if not auth.validate_password(
@@ -30,9 +32,8 @@ class AuthService:
         return UserResponse(id=res.id, email=res.email)
 
     async def get_current_token_payload(
-        self,
-        credentials: HTTPAuthorizationCredentials = Depends(http_bearer)
-        ) -> dict:
+        self, credentials: HTTPAuthorizationCredentials = Depends(http_bearer)
+    ) -> dict:
         token = credentials.credentials
         try:
             payload = auth.decode_jwt(
@@ -45,12 +46,11 @@ class AuthService:
             )
         return payload
 
-
     async def get_current_auth_user(
-            self,
-            session: AsyncSession,
-            payload: dict = Depends(get_current_token_payload),
-        ) -> UserResponse:
+        self,
+        session: AsyncSession,
+        payload: dict = Depends(get_current_token_payload),
+    ) -> UserResponse:
         email: str | None = payload.get("sub")
         res = await self.repository.get_user(session, email)
         if res is not None:

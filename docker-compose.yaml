@@ -1,4 +1,14 @@
 services:
+  app:
+    image: referral-service
+    build: .
+    networks:
+      - backend
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    restart: always
+    env_file:
+      - ".env"
   database:
     image: postgres:16
     restart: always
