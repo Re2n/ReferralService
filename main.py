@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from config.Database import db
+from routers.ReferralCode import referral_code_router
 from routers.User import user_router
 from schemas.Base import Base
 
@@ -16,3 +17,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
+app.include_router(referral_code_router)

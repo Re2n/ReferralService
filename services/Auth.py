@@ -1,10 +1,8 @@
-from typing import Any, Coroutine
-
 from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from jwt.exceptions import InvalidTokenError
-from models.UserCreate import UserCreateResponse, UserCreate
+from models.UserCreate import UserResponse, UserCreate
 from repositories.User import UserRepository
 from utils import auth
 
@@ -18,7 +16,7 @@ class AuthService:
             self,
             session: AsyncSession,
             user: UserCreate
-        ) -> UserCreateResponse:
+        ) -> UserResponse:
         res = await self.repository.get_user(session, user.email)
         exc = HTTPException(status_code=401, detail='Invalid credentials')
         if res is None:
@@ -29,7 +27,7 @@ class AuthService:
         ):
             raise exc
 
-        return UserCreateResponse(email=user.email)
+        return UserResponse(id=res.id, email=res.email)
 
     async def get_current_token_payload(
         self,
@@ -52,11 +50,11 @@ class AuthService:
             self,
             session: AsyncSession,
             payload: dict = Depends(get_current_token_payload),
-        ) -> UserCreateResponse:
+        ) -> UserResponse:
         email: str | None = payload.get("sub")
         res = await self.repository.get_user(session, email)
         if res is not None:
-            return UserCreateResponse(email=res.email)
+            return UserResponse(id=res.id, email=res.email)
 
         raise HTTPException(
             status_code=401,

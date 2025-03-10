@@ -15,6 +15,13 @@ class EnvironmentSettings(BaseSettings):
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: str
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_PORT: int
+    MAIL_SERVER: str
+    MAIL_STARTTLS: bool
+    MAIL_SSL_TLS: bool
+    MAIL_FROM: str
 
     class Config:
         env_file = get_env_filename()
