@@ -35,10 +35,9 @@ async def delete_referral_code(
     res = await referral_code_service.delete_code(session, payload.get("id"))
     return res
 
-@referral_code_router.get('/get_referral_code_by_email/{email}')
+@referral_code_router.get('/get_referral_code_by_email/')
 async def get_referral_code_by_email(
         session: Annotated[AsyncSession, Depends(db.session_getter)],
-        email: EmailStr,
         payload: dict = Depends(auth_service.get_current_token_payload),
 ):
     code = await referral_code_service.get_code(
@@ -46,6 +45,6 @@ async def get_referral_code_by_email(
         payload.get("id")
     )
     fm = FastMail(conf)
-    msg = await create_message(email, code)
+    msg = await create_message(payload.get("email"), code)
     await fm.send_message(msg)
     return {"detail": "Email has been sent"}
