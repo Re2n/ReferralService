@@ -6,4 +6,4 @@
 
 <code>docker compose up -d</code>
 
-[Документация](localhost:5466/#docs)
+[Документация](localhost:5466/docs#)
